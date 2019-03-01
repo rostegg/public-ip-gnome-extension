@@ -1,2 +1,4 @@
 # public-ip-gnome-extension
-Tiny extension for gnome shell, which show public IP and nothing more
+
+Tested on gnome-shell 3.28
+
