@@ -43,7 +43,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     let hbox = new St.BoxLayout({style_class: 'ip-data-panel'});
     
     _icon = new St.Icon({
-      gicon: Gio.icon_new_for_string(`${Me.path}/icons/flags/ad.png`),
+      gicon: null,
       style_class: 'system-status-icon'
     });
 
