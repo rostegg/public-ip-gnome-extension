@@ -9,7 +9,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const DEFAULT_REFRESH_RATE = 5;
-const ICON_SIZE = 16;
 const NO_CONNECTION = 'Waiting for connection';
 const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
@@ -46,7 +45,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     
     _icon = new St.Icon({
       gicon: Gio.icon_new_for_string(`${Me.path}/icons/flags/ad.png`),
-      icon_size: ICON_SIZE
+      style_class: 'system-status-icon'
     });
 
 
