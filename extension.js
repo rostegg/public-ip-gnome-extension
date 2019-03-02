@@ -18,7 +18,6 @@ let _label, _icon;
 const _makeRequest = (callback) => {
   let endpoint = `http://ip-api.com/json/?fields=status,countryCode,query`;
 
-
   let _httpSession = new Soup.SessionAsync();
   Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
 
@@ -62,10 +61,11 @@ class IpInfoIndicator extends PanelMenu.Button {
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
 
     this.update();
+    Mainloop.timeout_add_seconds(DEFAULT_REFRESH_RATE, this.update.bind(this));
   }
 
   requestCallback(err, responseData) {
-    if (responseData){
+    if (responseData) {
       let countryCode = responseData.countryCode.toLowerCase();
       let ipAddress = responseData.query;
 
@@ -83,8 +83,6 @@ class IpInfoIndicator extends PanelMenu.Button {
 
   update() {
     _makeRequest(this.requestCallback);
-    this._removeTimer();
-    this.timer = Mainloop.timeout_add_seconds(DEFAULT_REFRESH_RATE, this.update.bind(this));
     return true;
   }
 
