@@ -61,7 +61,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
 
     this.update();
-    Mainloop.timeout_add_seconds(DEFAULT_REFRESH_RATE, this.update.bind(this));
+    this.timer = Mainloop.timeout_add_seconds(DEFAULT_REFRESH_RATE, this.update.bind(this));
   }
 
   requestCallback(err, responseData) {
@@ -77,7 +77,7 @@ class IpInfoIndicator extends PanelMenu.Button {
   }
 
   destroy() {
-    this.stop();
+    this.removeTimer();
     super.destroy();
   }
 
@@ -86,16 +86,10 @@ class IpInfoIndicator extends PanelMenu.Button {
     return true;
   }
 
-  _removeTimer() {
+  removeTimer() {
     if (this.timer) {
       Mainloop.source_remove(this.timer);
       this.timer = null;
-    }
-  }
-
-  stop() {
-    if (this.timer) {
-      Mainloop.source_remove(this.timer);
     }
   }
 };
