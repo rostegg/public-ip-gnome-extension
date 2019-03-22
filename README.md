@@ -1,7 +1,7 @@
 # Public IP
 
 [![License Badge](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rostegg/email-spoofing-server/blob/master/LICENSE)
-[![Download](https://img.shields.io/static/v1.svg?label=shell-3.28&message=Download&color=orange)](https://extensions.gnome.org/)
+[![Download](https://img.shields.io/static/v1.svg?label=shell-3.28&message=Download&color=orange)](https://extensions.gnome.org/extension/1677/public-ip/)
 
 # How it look?
 ![Example](../assets/example.png?raw=true)
