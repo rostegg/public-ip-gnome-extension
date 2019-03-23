@@ -8,10 +8,9 @@ const DISPLAY_ONLY_ICONS = 'display-only-icon';
 
 const init = () => {/* Empty */};
 
-class PublicIpPrefs extends Gtk.Grid
-{
-	constructor()
-	{
+class PublicIpPrefs extends Gtk.Grid {
+	
+	constructor() {
 		super();
 		this.margin = 15;
 		this.row_spacing = 3;
