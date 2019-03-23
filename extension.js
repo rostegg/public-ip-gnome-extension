@@ -72,7 +72,7 @@ class IpInfoIndicator extends PanelMenu.Button {
       let countryCode = responseData.countryCode.toLowerCase();
       let ipAddress = responseData.query;
       _label.text = Settings.get_boolean('display-only-icon') ? '' : ipAddress;
-      _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/${countryCode}.png`);  
+      _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/${countryCode}.svg`);  
     } else {
       _label.text = Settings.get_boolean('display-only-icon') ? '' : CONNECTION_REFUSED;
     }
