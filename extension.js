@@ -47,10 +47,9 @@ class IpInfoIndicator extends PanelMenu.Button {
       style_class: 'system-status-icon'
     });
 
-
     _label = new St.Label({
       text: NO_CONNECTION,
-      style_class: 'ip-label'
+      y_align: Clutter.ActorAlign.CENTER
     });
     
     hbox.add_child(_icon);
