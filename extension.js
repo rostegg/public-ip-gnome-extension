@@ -7,8 +7,9 @@ const PanelMenu = imports.ui.panelMenu;
 const Gio = imports.gi.Gio;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
+const Settings = Convenience.getSettings();
 
-const DEFAULT_REFRESH_RATE = 5;
 const NO_CONNECTION = 'Waiting for connection';
 const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
@@ -41,14 +42,14 @@ class IpInfoIndicator extends PanelMenu.Button {
   constructor() {
     super(0.0, "Ip Info Indicator", false);
     let hbox = new St.BoxLayout({style_class: 'ip-data-panel'});
-    
+
     _icon = new St.Icon({
       gicon: null,
       style_class: 'system-status-icon'
     });
 
     _label = new St.Label({
-      text: NO_CONNECTION,
+      text: Settings.get_boolean('display-only-icon') ? '' : NO_CONNECTION,
       y_align: Clutter.ActorAlign.CENTER
     });
     
@@ -59,19 +60,21 @@ class IpInfoIndicator extends PanelMenu.Button {
 
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
 
+    Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
+    Settings.connect('changed::display-only-icon', this.updateDisplayMode.bind(this));
+
     this.update();
-    this.timer = Mainloop.timeout_add_seconds(DEFAULT_REFRESH_RATE, this.update.bind(this));
+    this.updateRefreshRate();
   }
 
   requestCallback(err, responseData) {
     if (responseData) {
       let countryCode = responseData.countryCode.toLowerCase();
       let ipAddress = responseData.query;
-
-      _label.text = ipAddress;
+      _label.text = Settings.get_boolean('display-only-icon') ? '' : ipAddress;
       _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/${countryCode}.png`);  
     } else {
-      _label.text = CONNECTION_REFUSED;
+      _label.text = Settings.get_boolean('display-only-icon') ? '' : CONNECTION_REFUSED;
     }
   }
 
@@ -90,6 +93,17 @@ class IpInfoIndicator extends PanelMenu.Button {
       Mainloop.source_remove(this.timer);
       this.timer = null;
     }
+  }
+
+  updateRefreshRate() {
+    this.refreshRate = Settings.get_int('refresh-rate');
+    this.removeTimer();
+    this.timer = Mainloop.timeout_add_seconds(this.refreshRate, this.update.bind(this));
+  }
+
+  updateDisplayMode() {
+    Main.panel.statusArea['ip-info-indicator'] = null;
+    Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
   }
 };
 
