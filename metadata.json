@@ -1,1 +1,1 @@
-{"name": "Public IP", "description": "Tiny extension, which show public IP and nothing more", "uuid": "public-ip-extension@rostegg.github.com", "shell-version": ["3.26", "3.28"], "url":"https://github.com/rostegg/public-ip-gnome-extension", "version":2}
+{"name": "Public IP", "description": "Tiny extension, which show public IP and nothing more", "uuid": "public-ip-extension@rostegg.github.com", "shell-version": ["3.26", "3.28", "3.30"], "url":"https://github.com/rostegg/public-ip-gnome-extension", "version":2}
