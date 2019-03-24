@@ -104,6 +104,7 @@ class IpInfoIndicator extends PanelMenu.Button {
   updateDisplayMode() {
     Main.panel.statusArea['ip-info-indicator'] = null;
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
+    this.update();
   }
 };
 
