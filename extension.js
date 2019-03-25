@@ -60,52 +60,54 @@ class IpInfoIndicator extends PanelMenu.Button {
 
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
 
+    this.requestCallback = (err, responseData) => {
+      if (responseData) {
+        let countryCode = responseData.countryCode.toLowerCase();
+        let ipAddress = responseData.query;
+        _label.text = Settings.get_boolean('display-only-icon') ? '' : ipAddress;
+        _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/${countryCode}.svg`);  
+      } else {
+        _label.text = Settings.get_boolean('display-only-icon') ? '' : CONNECTION_REFUSED;
+      }
+    }
+  
+    this.destroy = () => {
+      this.removeTimer();
+      super.destroy();
+    }
+  
+    this.update = () => {
+      _makeRequest(this.requestCallback);
+      return true;
+    }
+  
+    this.removeTimer = () => {
+      if (this.timer) {
+        Mainloop.source_remove(this.timer);
+        this.timer = null;
+      }
+    }
+  
+    this.updateRefreshRate = () => {
+      this.refreshRate = Settings.get_int('refresh-rate');
+      this.removeTimer();
+      this.timer = Mainloop.timeout_add_seconds(this.refreshRate, this.update.bind(this));
+    }
+  
+    this.updateDisplayMode = () => {
+      Main.panel.statusArea['ip-info-indicator'] = null;
+      Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
+      this.update();
+    }
+
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
     Settings.connect('changed::display-only-icon', this.updateDisplayMode.bind(this));
-
+    
     this.update();
     this.updateRefreshRate();
   }
 
-  requestCallback(err, responseData) {
-    if (responseData) {
-      let countryCode = responseData.countryCode.toLowerCase();
-      let ipAddress = responseData.query;
-      _label.text = Settings.get_boolean('display-only-icon') ? '' : ipAddress;
-      _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/${countryCode}.svg`);  
-    } else {
-      _label.text = Settings.get_boolean('display-only-icon') ? '' : CONNECTION_REFUSED;
-    }
-  }
-
-  destroy() {
-    this.removeTimer();
-    super.destroy();
-  }
-
-  update() {
-    _makeRequest(this.requestCallback);
-    return true;
-  }
-
-  removeTimer() {
-    if (this.timer) {
-      Mainloop.source_remove(this.timer);
-      this.timer = null;
-    }
-  }
-
-  updateRefreshRate() {
-    this.refreshRate = Settings.get_int('refresh-rate');
-    this.removeTimer();
-    this.timer = Mainloop.timeout_add_seconds(this.refreshRate, this.update.bind(this));
-  }
-
-  updateDisplayMode() {
-    Main.panel.statusArea['ip-info-indicator'] = null;
-    Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
-    this.update();
-  }
+  
 };
 
 let _indicator;
