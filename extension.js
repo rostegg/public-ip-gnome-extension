@@ -66,7 +66,7 @@ class IpInfoIndicator extends PanelMenu.Button {
                                     responseData.query;
 
       _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
-                                    Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode.toLowerCase()}.png`);
+                                    Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
     }
   
     this.destroy = () => {
