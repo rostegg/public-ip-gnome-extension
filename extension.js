@@ -61,15 +61,12 @@ class IpInfoIndicator extends PanelMenu.Button {
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
 
     this.requestCallback = (err, responseData) => {
-      if (responseData) {
-        let countryCode = responseData.countryCode.toLowerCase();
-        let ipAddress = responseData.query;
-        _label.text = Settings.get_boolean('display-only-icon') ? '' : ipAddress;
-        _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/${countryCode}.png`);  
-      } else {
-        _label.text = Settings.get_boolean('display-only-icon') ? '' : CONNECTION_REFUSED;
-        _icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`);  
-      }
+      _label.text = !responseData ? CONNECTION_REFUSED : 
+                                    Settings.get_boolean('display-only-icon') ? '' :
+                                    responseData.query;
+
+      _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
+                                    Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode.toLowerCase()}.png`);
     }
   
     this.destroy = () => {
