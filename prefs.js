@@ -5,6 +5,8 @@ const Convenience = Me.imports.convenience;
 
 const REFRESH_RATE = 'refresh-rate';
 const DISPLAY_ONLY_ICONS = 'display-only-icon';
+const API_SERVICE_ENDPOINT = 'api-service-endpoint';
+const API_SERVICES = ['ip-api', 'ipapi']
 
 const init = () => {/* Empty */};
 
@@ -46,6 +48,20 @@ class PublicIpPrefs extends Gtk.Grid {
 		container.pack_start(label, 0,0,0);
 		container.pack_end(displayIconButton, 0,0,0);
 		this.attach(container, 0, 2, 1, 1);
+
+		/* API service endpoint */
+		container = new Gtk.HBox({spacing: 5});
+		label = new Gtk.Label({
+			label: "API service",
+			margin_left: 10
+		});
+
+		let apiServicesComboBox = new Gtk.ComboBoxText();
+		API_SERVICES.forEach((service) => apiServicesComboBox.append(service,service));
+		this._settings.bind(API_SERVICE_ENDPOINT, apiServicesComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
+		container.pack_start(label, 0,0,0);
+		container.pack_end(apiServicesComboBox, 0,0,0);
+		this.attach(container, 0, 3, 1, 1);
 	}
 }
 
