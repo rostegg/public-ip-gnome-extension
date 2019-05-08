@@ -8,7 +8,7 @@
       <default>false</default>
       <summary>Display only icon</summary>
     </key>
-    <key type="s" name="api-service-endpoint">
+    <key type="s" name="api-service">
       <default>"ip-api"</default>
       <summary>API service</summary>
     </key>
