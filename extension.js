@@ -15,7 +15,7 @@ const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
 
 let _label, _icon;
-let currentService = 'ip-api'
+let currentService = 'ip-api';
 
 const servicesRequestProcessors = {
   'ip-api' : (httpSession, callback) => {
@@ -29,7 +29,7 @@ const servicesRequestProcessors = {
       }
       let responseJSON = request.response_body.data;
       let responseData = JSON.parse(responseJSON);
-      let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode }
+      let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode };
       callback(null, simplifiedResponseData);
     };
 
@@ -51,7 +51,7 @@ const servicesRequestProcessors = {
         callback(responseData.reason, null);
         return;
       }
-      let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country }
+      let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country };
       callback(null, simplifiedResponseData);
     };
 
@@ -129,13 +129,13 @@ class IpInfoIndicator extends PanelMenu.Button {
     }
 
     this.updateService = () => {
-      currentService = Settings.get_string('api-service-endpoint');
+      currentService = Settings.get_string('api-service');
       this.update();
     }
 
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
     Settings.connect('changed::display-only-icon', this.updateDisplayMode.bind(this));
-    Settings.connect('changed::api-service-endpoint', this.updateService.bind(this));
+    Settings.connect('changed::api-service', this.updateService.bind(this));
     
     this.update();
     this.updateRefreshRate();
