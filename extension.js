@@ -15,26 +15,56 @@ const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
 
 let _label, _icon;
+let currentService = 'ip-api'
+
+const servicesRequestProcessors = {
+  'ip-api' : (httpSession, callback) => {
+    let endpoint = `http://ip-api.com/json/?fields=status,countryCode,query`;
+    let request = Soup.Message.new('GET', endpoint);
+
+    const _processRequest = (httpSession, message) => {
+      if (message.status_code !== 200) {
+        callback(message.status_code, null);
+        return;
+      }
+      let responseJSON = request.response_body.data;
+      let responseData = JSON.parse(responseJSON);
+      let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode }
+      callback(null, simplifiedResponseData);
+    };
+
+    httpSession.queue_message(request, _processRequest);
+  },
+
+  'ipapi' : (httpSession, callback) => {
+    let endpoint = `https://ipapi.co/json/`;
+    let request = Soup.Message.new('GET', endpoint);
+
+    const _processRequest = (httpSession, message) => {
+      if (message.status_code !== 200) {
+        callback(message.status_code, null);
+        return;
+      }
+      let responseJSON = request.response_body.data;
+      let responseData = JSON.parse(responseJSON);
+      if (responseData.error) {
+        callback(responseData.reason, null);
+        return;
+      }
+      let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country }
+      callback(null, simplifiedResponseData);
+    };
+
+    httpSession.queue_message(request, _processRequest);
+  }
+}
 
 const _makeRequest = (callback) => {
-  let endpoint = `http://ip-api.com/json/?fields=status,countryCode,query`;
 
-  let _httpSession = new Soup.SessionAsync();
-  Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
+  let httpSession = new Soup.SessionAsync();
+  Soup.Session.prototype.add_feature.call(httpSession, new Soup.ProxyResolverDefault());
 
-  let request = Soup.Message.new('GET', endpoint);
-
-  const _processRequest = (_httpSession, message) => {
-    if (message.status_code !== 200) {
-      callback(message.status_code, null);
-      return;
-    }
-    let responseJSON = request.response_body.data;
-    let responseData = JSON.parse(responseJSON);
-    callback(null, responseData);
-  };
-
-  _httpSession.queue_message(request, _processRequest);
+  servicesRequestProcessors[currentService](httpSession, callback);
 };
 
 class IpInfoIndicator extends PanelMenu.Button {
@@ -63,7 +93,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     this.requestCallback = (err, responseData) => {
       _label.text = !responseData ? CONNECTION_REFUSED : 
                                     Settings.get_boolean('display-only-icon') ? '' :
-                                    responseData.query;
+                                    responseData.ip;
 
       _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
                                     Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
@@ -98,8 +128,14 @@ class IpInfoIndicator extends PanelMenu.Button {
       this.update();
     }
 
+    this.updateService = () => {
+      currentService = Settings.get_string('api-service-endpoint');
+      this.update();
+    }
+
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
     Settings.connect('changed::display-only-icon', this.updateDisplayMode.bind(this));
+    Settings.connect('changed::api-service-endpoint', this.updateService.bind(this));
     
     this.update();
     this.updateRefreshRate();
