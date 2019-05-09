@@ -18,71 +18,89 @@ let _label, _icon;
 let currentService = 'ip-api.com';
 
 const servicesRequestProcessors = {
-  'ip-api.com' : (httpSession, callback) => {
-    let endpoint = `http://ip-api.com/json/?fields=status,countryCode,query`;
-    let request = Soup.Message.new('GET', endpoint);
-
-    const _processRequest = (httpSession, message) => {
-      if (message.status_code !== 200) {
-        callback(message.status_code, null);
-        return;
-      }
-      let responseJSON = request.response_body.data;
-      let responseData = JSON.parse(responseJSON);
-      let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode };
-      callback(null, simplifiedResponseData);
-    };
-
-    httpSession.queue_message(request, _processRequest);
+  'ip-api.com': {
+    endpoint: `http://ip-api.com/json/?fields=status,countryCode,query`,
+    process: (httpSession, request, callback) => {
+      const _processRequest = (httpSession, message) => {
+        if (message.status_code !== 200) {
+          callback(message.status_code, null);
+          return;
+        }
+        let responseJSON = request.response_body.data;
+        let responseData = JSON.parse(responseJSON);
+        let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode };
+        callback(null, simplifiedResponseData);
+      };
+  
+      httpSession.queue_message(request, _processRequest);
+    }
   },
 
-  'ipapi.co' : (httpSession, callback) => {
-    let endpoint = `https://ipapi.co/json/`;
-    let request = Soup.Message.new('GET', endpoint);
-
-    const _processRequest = (httpSession, message) => {
-      if (message.status_code !== 200) {
-        callback(message.status_code, null);
-        return;
-      }
-      let responseJSON = request.response_body.data;
-      let responseData = JSON.parse(responseJSON);
-      if (responseData.error) {
-        callback(responseData.reason, null);
-        return;
-      }
-      let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country };
-      callback(null, simplifiedResponseData);
-    };
-
-    httpSession.queue_message(request, _processRequest);
+  'ipapi.co': {
+    endpoint: `https://ipapi.co/json/`,
+    process: (httpSession, request, callback) => {
+      const _processRequest = (httpSession, message) => {
+        if (message.status_code !== 200) {
+          callback(message.status_code, null);
+          return;
+        }
+        let responseJSON = request.response_body.data;
+        let responseData = JSON.parse(responseJSON);
+        if (responseData.error) {
+          callback(responseData.reason, null);
+          return;
+        }
+        let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country };
+        callback(null, simplifiedResponseData);
+      };
+  
+      httpSession.queue_message(request, _processRequest);
+    }
   },
 
-  'myip.com' : (httpSession, callback) => {
-    let endpoint = `https://api.myip.com`;
-    let request = Soup.Message.new('GET', endpoint);
+  'myip.com': {
+    endpoint: `https://api.myip.com`,
+    process: (httpSession, request, callback) => {
+      const _processRequest = (httpSession, message) => {
+        if (message.status_code !== 200) {
+          callback(message.status_code, null);
+          return;
+        }
+        let responseJSON = request.response_body.data;
+        let responseData = JSON.parse(responseJSON);
+        let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.cc };
+        callback(null, simplifiedResponseData);
+      };
+  
+      httpSession.queue_message(request, _processRequest);
+    }
+  },
 
-    const _processRequest = (httpSession, message) => {
-      if (message.status_code !== 200) {
-        callback(message.status_code, null);
-        return;
-      }
-      let responseJSON = request.response_body.data;
-      let responseData = JSON.parse(responseJSON);
-      let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.cc };
-      callback(null, simplifiedResponseData);
-    };
-
-    httpSession.queue_message(request, _processRequest);
+  'ip.sb': {
+    endpoint: `https://api.ip.sb/geoip`,
+    process: (httpSession, request, callback) => {
+      const _processRequest = (httpSession, message) => {
+        if (message.status_code !== 200) {
+          callback(message.status_code, null);
+          return;
+        }
+        let responseJSON = request.response_body.data;
+        let responseData = JSON.parse(responseJSON);
+        let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country_code };
+        callback(null, simplifiedResponseData);
+      };
+  
+      httpSession.queue_message(request, _processRequest);
+    }
   }
 }
 
 const _makeRequest = (callback) => {
-
   let httpSession = new Soup.SessionAsync();
   Soup.Session.prototype.add_feature.call(httpSession, new Soup.ProxyResolverDefault());
-
-  servicesRequestProcessors[currentService](httpSession, callback);
+  const service = servicesRequestProcessors[currentService];
+  let request = Soup.Message.new('GET', service.endpoint);
+  service.process(httpSession, request, callback);
 };
 
 class IpInfoIndicator extends PanelMenu.Button {
