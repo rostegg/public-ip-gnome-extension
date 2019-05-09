@@ -24,3 +24,14 @@
 You can download extension from link above.
 
 If you want install it manually, clone project to ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com folder and restart gnome desktop (Alt + F2 -> r -> Enter)
+
+# Why 'Connection refused'?  
+This may be for two reasons:
+* Lack of internet connection  
+* Lack of connection with the selected service (service is down, your ip was banned, etc). Now there are four services to choose from:  
+  - http://ip-api.com/json/?fields=status,countryCode,query  
+  - https://ipapi.co/json/  
+  - https://api.myip.com  
+  - https://api.ip.sb/geoip   
+
+If you want to add own service, just create issue with link to api.
