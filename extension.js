@@ -15,10 +15,10 @@ const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
 
 let _label, _icon;
-let currentService = 'ip-api';
+let currentService = 'ip-api.com';
 
 const servicesRequestProcessors = {
-  'ip-api' : (httpSession, callback) => {
+  'ip-api.com' : (httpSession, callback) => {
     let endpoint = `http://ip-api.com/json/?fields=status,countryCode,query`;
     let request = Soup.Message.new('GET', endpoint);
 
@@ -36,7 +36,7 @@ const servicesRequestProcessors = {
     httpSession.queue_message(request, _processRequest);
   },
 
-  'ipapi' : (httpSession, callback) => {
+  'ipapi.co' : (httpSession, callback) => {
     let endpoint = `https://ipapi.co/json/`;
     let request = Soup.Message.new('GET', endpoint);
 
@@ -52,6 +52,24 @@ const servicesRequestProcessors = {
         return;
       }
       let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.country };
+      callback(null, simplifiedResponseData);
+    };
+
+    httpSession.queue_message(request, _processRequest);
+  },
+
+  'myip.com' : (httpSession, callback) => {
+    let endpoint = `https://api.myip.com`;
+    let request = Soup.Message.new('GET', endpoint);
+
+    const _processRequest = (httpSession, message) => {
+      if (message.status_code !== 200) {
+        callback(message.status_code, null);
+        return;
+      }
+      let responseJSON = request.response_body.data;
+      let responseData = JSON.parse(responseJSON);
+      let simplifiedResponseData = { ip: responseData.ip, countryCode: responseData.cc };
       callback(null, simplifiedResponseData);
     };
 

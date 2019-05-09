@@ -9,7 +9,7 @@
       <summary>Display only icon</summary>
     </key>
     <key type="s" name="api-service">
-      <default>"ip-api"</default>
+      <default>"ip-api.com"</default>
       <summary>API service</summary>
     </key>
 </schema>
