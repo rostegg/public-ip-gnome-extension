@@ -15,7 +15,7 @@
 
 ![Example-Flag-Mode](../assets/example-only-flag.png)
 
-* Available settings (refresh rate and display mode)
+* Available settings
 
 ![Example-Settings](../assets/settings.png)
 
