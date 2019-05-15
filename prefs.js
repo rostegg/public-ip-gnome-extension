@@ -4,9 +4,10 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
 const REFRESH_RATE = 'refresh-rate';
-const DISPLAY_ONLY_ICONS = 'display-only-icon';
 const API_SERVICE = 'api-service';
-const API_SERVICES = ['ip-api.com', 'ipapi.co', 'myip.com', 'ip.sb']
+const API_SERVICES = ['ip-api.com', 'ipapi.co', 'myip.com', 'ip.sb'];
+const DISPLAY_MODE = 'display-mode';
+const DISPLAY_MODES = ['only-flag', 'only-ip', 'ip-and-flag'];
 
 const init = () => {/* Empty */};
 
@@ -40,19 +41,20 @@ class PublicIpPrefs extends Gtk.Grid {
 		/* Display only flag */
 		container = new Gtk.HBox({spacing: 5});
 		label = new Gtk.Label({
-			label: "Display only flag",
+			label: "Display mode:",
 			margin_left: 10
 		});
-    	let displayIconButton = new Gtk.CheckButton({margin_top: 5});
-		this._settings.bind(DISPLAY_ONLY_ICONS, displayIconButton, 'active', Gio.SettingsBindFlags.DEFAULT);
+		let displayModeComboBox = new Gtk.ComboBoxText();
+		DISPLAY_MODES.forEach((mode) => displayModeComboBox.append(mode,mode));
+		this._settings.bind(DISPLAY_MODE, displayModeComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
-		container.pack_end(displayIconButton, 0,0,0);
+		container.pack_end(displayModeComboBox, 0,0,0);
 		this.attach(container, 0, 2, 1, 1);
 
 		/* API service endpoint */
 		container = new Gtk.HBox({spacing: 5});
 		label = new Gtk.Label({
-			label: "API service",
+			label: "API service:",
 			margin_left: 10
 		});
 

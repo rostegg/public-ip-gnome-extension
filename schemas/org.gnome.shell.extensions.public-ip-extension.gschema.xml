@@ -4,9 +4,9 @@
       <default>15</default>
       <summary>How often to refresh?(in seconds)</summary>
     </key>
-    <key type="b" name="display-only-icon">
-      <default>false</default>
-      <summary>Display only icon</summary>
+    <key type="s" name="display-mode">
+      <default>"ip-and-flag"</default>
+      <summary>Display mode</summary>
     </key>
     <key type="s" name="api-service">
       <default>"ip-api.com"</default>

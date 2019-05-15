@@ -16,6 +16,7 @@ const CONNECTION_REFUSED = 'Connection refused';
 
 let _label, _icon;
 let currentService = 'ip-api.com';
+let currentMode = 'ip-and-flag';
 
 const servicesRequestProcessors = {
   'ip-api.com': {
@@ -95,12 +96,33 @@ const servicesRequestProcessors = {
   }
 }
 
-const _makeRequest = (callback) => {
+const displayModeProcessors = {
+  'ip-and-flag' : (err, responseData) => {
+    _label.text = !responseData ? CONNECTION_REFUSED : responseData.ip;
+
+    _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
+                                    Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
+  },
+  'only-flag' : (err, responseData) => {
+    _label.text = '';
+
+    _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
+                                    Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
+  },
+  'only-ip' : (err, responseData) => {
+    _label.text = !responseData ? CONNECTION_REFUSED : responseData.ip;
+
+    _icon.gicon = null;
+  }
+}
+
+const _makeRequest = () => {
   let httpSession = new Soup.SessionAsync();
   Soup.Session.prototype.add_feature.call(httpSession, new Soup.ProxyResolverDefault());
   const service = servicesRequestProcessors[currentService];
   let request = Soup.Message.new('GET', service.endpoint);
-  service.process(httpSession, request, callback);
+  const requestCallback = displayModeProcessors[currentMode];
+  service.process(httpSession, request, requestCallback);
 };
 
 class IpInfoIndicator extends PanelMenu.Button {
@@ -115,7 +137,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     });
 
     _label = new St.Label({
-      text: Settings.get_boolean('display-only-icon') ? '' : NO_CONNECTION,
+      text: Settings.get_boolean('display-mode') ? '' : NO_CONNECTION,
       y_align: Clutter.ActorAlign.CENTER
     });
     
@@ -125,15 +147,6 @@ class IpInfoIndicator extends PanelMenu.Button {
     this.actor.add_actor(hbox);
 
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
-
-    this.requestCallback = (err, responseData) => {
-      _label.text = !responseData ? CONNECTION_REFUSED : 
-                                    Settings.get_boolean('display-only-icon') ? '' :
-                                    responseData.ip;
-
-      _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
-                                    Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
-    }
   
     this.destroy = () => {
       this.removeTimer();
@@ -141,7 +154,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     }
   
     this.update = () => {
-      _makeRequest(this.requestCallback);
+      _makeRequest();
       return true;
     }
   
@@ -159,6 +172,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     }
   
     this.updateDisplayMode = () => {
+      currentMode = Settings.get_string('display-mode');
       Main.panel.statusArea['ip-info-indicator'] = null;
       Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
       this.update();
@@ -170,7 +184,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     }
 
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
-    Settings.connect('changed::display-only-icon', this.updateDisplayMode.bind(this));
+    Settings.connect('changed::display-mode', this.updateDisplayMode.bind(this));
     Settings.connect('changed::api-service', this.updateService.bind(this));
     
     this.update();
