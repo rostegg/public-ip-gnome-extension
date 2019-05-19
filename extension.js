@@ -15,8 +15,6 @@ const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
 
 let _label, _icon;
-let currentService = 'ip-api.com';
-let currentMode = 'ip-and-flag';
 
 const servicesRequestProcessors = {
   'ip-api.com': {
@@ -119,6 +117,8 @@ const displayModeProcessors = {
 const _makeRequest = () => {
   let httpSession = new Soup.SessionAsync();
   Soup.Session.prototype.add_feature.call(httpSession, new Soup.ProxyResolverDefault());
+  const currentService = Settings.get_string('api-service'), 
+    currentMode = Settings.get_string('display-mode');
   const service = servicesRequestProcessors[currentService];
   let request = Soup.Message.new('GET', service.endpoint);
   const requestCallback = displayModeProcessors[currentMode];
@@ -172,14 +172,12 @@ class IpInfoIndicator extends PanelMenu.Button {
     }
   
     this.updateDisplayMode = () => {
-      currentMode = Settings.get_string('display-mode');
       Main.panel.statusArea['ip-info-indicator'] = null;
       Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
       this.update();
     }
 
     this.updateService = () => {
-      currentService = Settings.get_string('api-service');
       this.update();
     }
 
