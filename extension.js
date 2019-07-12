@@ -177,6 +177,10 @@ class IpInfoIndicator extends PanelMenu.Button {
       this.update();
     }
 
+    this.onClick = () => {
+      this.update();
+    }
+
     this.updateService = () => {
       this.update();
     }
@@ -184,6 +188,8 @@ class IpInfoIndicator extends PanelMenu.Button {
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
     Settings.connect('changed::display-mode', this.updateDisplayMode.bind(this));
     Settings.connect('changed::api-service', this.updateService.bind(this));
+
+    this.actor.connect('button-press-event', this.onClick.bind(this));
     
     this.update();
     this.updateRefreshRate();
