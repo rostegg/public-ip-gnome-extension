@@ -1,0 +1,1 @@
+zip -r public_ip_extension.zip . -x .\* -x "deploy.sh" -x "LICENSE"
