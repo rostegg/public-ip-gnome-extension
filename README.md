@@ -35,3 +35,6 @@ This may be for two reasons:
   - https://api.ip.sb/geoip   
 
 If you want to add own service, just create issue with link to api.
+
+# Bug report  
+For bug report provide gnome shell version (gnome-shell --version) adn error message, if installation failed (Alt+F2 -> lg -> Extensions -> Show Errors).
