@@ -37,8 +37,6 @@ You can download extension from link above.
 
 If you want install it manually, clone project to ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com folder and restart gnome desktop (Alt + F2 -> r -> Enter)
 
-
-
 # Why 'Connection refused'?  
 This may be for two reasons:
 * Lack of internet connection  
