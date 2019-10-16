@@ -19,6 +19,18 @@
 
 ![Example-Settings](../assets/settings.png)
 
+# How to install on Arch Linux
+
+If you are using Arch Linux feel free to use this AUR.
+
+https://aur.archlinux.org/packages/gnome-shell-extension-public-ip-git/
+
+```
+git clone https://aur.archlinux.org/gnome-shell-extension-public-ip-git.git
+cd gnome-shell-extension-public-ip-git
+makepkg -sri
+```
+
 # How to install?
 
 You can download extension from link above.
