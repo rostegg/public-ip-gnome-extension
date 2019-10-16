@@ -19,11 +19,25 @@
 
 ![Example-Settings](../assets/settings.png)
 
+# How to install on Arch Linux
+
+If you are using Arch Linux feel free to use this AUR.
+
+https://aur.archlinux.org/packages/gnome-shell-extension-public-ip-git/
+
+```
+git clone https://aur.archlinux.org/gnome-shell-extension-public-ip-git.git
+cd gnome-shell-extension-public-ip-git
+makepkg -sri
+```
+
 # How to install?
 
 You can download extension from link above.
 
 If you want install it manually, clone project to ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com folder and restart gnome desktop (Alt + F2 -> r -> Enter)
+
+
 
 # Why 'Connection refused'?  
 This may be for two reasons:
