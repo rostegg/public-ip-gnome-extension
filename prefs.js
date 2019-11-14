@@ -5,7 +5,7 @@ const Convenience = Me.imports.convenience;
 
 const REFRESH_RATE = 'refresh-rate';
 const API_SERVICE = 'api-service';
-const API_SERVICES = ['ip-api.com', 'ipapi.co', 'myip.com', 'ip.sb'];
+const API_SERVICES = ['ip-api.com', 'ipapi.co', 'myip.com', 'ip.sb', 'local-ip'];
 const DISPLAY_MODE = 'display-mode';
 const DISPLAY_MODES = ['only-flag', 'only-ip', 'ip-and-flag'];
 
