@@ -149,9 +149,9 @@ const selectIcon = (responseData) => {
                                           Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
 }  
 
-const _makeRequest = () => {
+const updateDisplay = (displayMode = 'ip-and-flag') => {
   const currentService = Settings.get_string('api-service'), 
-    currentMode = Settings.get_string('display-mode');
+    currentMode = displayMode;
   const service = servicesRequestProcessors[currentService];
   const requestCallback = displayModeProcessors[currentMode];
   service.process(requestCallback);
@@ -186,7 +186,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     }
   
     this.update = () => {
-      _makeRequest();
+      updateDisplay(Settings.get_string('display-mode'));
       return true;
     }
   
@@ -217,11 +217,25 @@ class IpInfoIndicator extends PanelMenu.Button {
       this.update();
     }
 
+    this.onEntryNotify = () => {
+      Settings.get_boolean('enable-onmouse-display') 
+        && Settings.get_string('display-mode') != 'ip-and-flag'
+        && updateDisplay();
+    }
+
+    this.onLeaveNotify =() => {
+      Settings.get_boolean('enable-onmouse-display')
+        && Settings.get_string('display-mode') != 'ip-and-flag'
+        && this.update();
+    }
+
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
     Settings.connect('changed::display-mode', this.updateDisplayMode.bind(this));
     Settings.connect('changed::api-service', this.updateService.bind(this));
 
     this.actor.connect('button-press-event', this.onClick.bind(this));
+    this.actor.connect('enter-event', this.onEntryNotify.bind(this));
+    this.actor.connect('leave-event', this.onLeaveNotify.bind(this));
     
     this.update();
     this.updateRefreshRate();

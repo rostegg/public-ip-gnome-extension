@@ -12,5 +12,12 @@
       <default>"ip-api.com"</default>
       <summary>API service</summary>
     </key>
+    <key type="b" name="enable-onmouse-display">
+      <default>false</default>
+      <summary>Enable full display mode onMouseOver</summary>
+      <description>
+        Enables 'ip-and-flag' mode on mouse over event.
+      </description>
+    </key>
 </schema>
 </schemalist>

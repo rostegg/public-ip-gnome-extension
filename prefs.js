@@ -8,6 +8,7 @@ const API_SERVICE = 'api-service';
 const API_SERVICES = ['ip-api.com', 'ipapi.co', 'myip.com', 'ip.sb', 'local-ip'];
 const DISPLAY_MODE = 'display-mode';
 const DISPLAY_MODES = ['only-flag', 'only-ip', 'ip-and-flag'];
+const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
 const init = () => {/* Empty */};
 
@@ -64,6 +65,22 @@ class PublicIpPrefs extends Gtk.Grid {
 		container.pack_start(label, 0,0,0);
 		container.pack_end(apiServicesComboBox, 0,0,0);
 		this.attach(container, 0, 3, 1, 1);
+
+		/* Enable onMouseOver */
+		container = new Gtk.HBox({spacing: 5});
+		label = new Gtk.Label({
+			label: "Enable onMouseOver",
+			margin_left: 10
+		});
+
+		let switchWidget = new Gtk.Switch();
+		switchWidget.set_sensitive(true);
+		switchWidget.set_active(this._settings.get_boolean(ON_MOUSE_OVER_STATE));
+		this._settings.bind(ON_MOUSE_OVER_STATE, switchWidget, 'active', Gio.SettingsBindFlags.DEFAULT);
+		container.pack_start(label, 0,0,0);
+		container.pack_end(switchWidget, 0,0,0);
+		this.attach(container, 0, 4, 1, 1);
+		
 	}
 }
 
