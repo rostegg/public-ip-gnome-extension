@@ -13,7 +13,6 @@ const GLib = imports.gi.GLib;
 
 const NO_CONNECTION = 'Waiting for connection';
 const CANT_GET_LOCAL_IP = `Can't get local ip`;
-const MENU_POSITION = 'right';
 const CONNECTION_REFUSED = 'Connection refused';
 
 let _label, _icon;
@@ -178,7 +177,7 @@ class IpInfoIndicator extends PanelMenu.Button {
 
     this.actor.add_actor(hbox);
 
-    Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
+    Main.panel.addToStatusArea('ip-info-indicator', this, 1, Settings.get_string('indicator-panel-align'));
   
     this.destroy = () => {
       this.removeTimer();
@@ -202,11 +201,20 @@ class IpInfoIndicator extends PanelMenu.Button {
       this.removeTimer();
       this.timer = Mainloop.timeout_add_seconds(this.refreshRate, this.update.bind(this));
     }
+
+    this.refreshPanel = () => {
+      Main.panel.statusArea['ip-info-indicator'] = null;
+      const align = Settings.get_string('indicator-panel-align');
+      Main.panel.addToStatusArea('ip-info-indicator', this, 1, align);
+    }
   
     this.updateDisplayMode = () => {
-      Main.panel.statusArea['ip-info-indicator'] = null;
-      Main.panel.addToStatusArea('ip-info-indicator', this, 1, MENU_POSITION);
+      this.refreshPanel();
       this.update();
+    }
+
+    this.updateAlign = () => {
+      this.refreshPanel();
     }
 
     this.onClick = () => {
@@ -232,6 +240,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     Settings.connect('changed::refresh-rate', this.updateRefreshRate.bind(this));
     Settings.connect('changed::display-mode', this.updateDisplayMode.bind(this));
     Settings.connect('changed::api-service', this.updateService.bind(this));
+    Settings.connect('changed::indicator-panel-align', this.updateAlign.bind(this));
 
     this.actor.connect('button-press-event', this.onClick.bind(this));
     this.actor.connect('enter-event', this.onEntryNotify.bind(this));

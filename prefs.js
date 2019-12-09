@@ -8,6 +8,8 @@ const API_SERVICE = 'api-service';
 const API_SERVICES = ['ip-api.com', 'ipapi.co', 'myip.com', 'ip.sb', 'local-ip'];
 const DISPLAY_MODE = 'display-mode';
 const DISPLAY_MODES = ['only-flag', 'only-ip', 'ip-and-flag'];
+const INDICATOR_ALIGN = 'indicator-panel-align';
+const INDICATOR_ALIGNS = ['left', 'right', 'center'];
 const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
 const init = () => {/* Empty */};
@@ -66,6 +68,20 @@ class PublicIpPrefs extends Gtk.Grid {
 		container.pack_end(apiServicesComboBox, 0,0,0);
 		this.attach(container, 0, 3, 1, 1);
 
+		/* Indicator align */
+		container = new Gtk.HBox({spacing: 5});
+		label = new Gtk.Label({
+			label: "Indicator align:",
+			margin_left: 10
+		});
+
+		let indicatorAlignComboBox = new Gtk.ComboBoxText();
+		INDICATOR_ALIGNS.forEach((align) => indicatorAlignComboBox.append(align,align));
+		this._settings.bind(INDICATOR_ALIGN, indicatorAlignComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
+		container.pack_start(label, 0,0,0);
+		container.pack_end(indicatorAlignComboBox, 0,0,0);
+		this.attach(container, 0, 4, 1, 1);
+		
 		/* Enable onMouseOver */
 		container = new Gtk.HBox({spacing: 5});
 		label = new Gtk.Label({
@@ -79,7 +95,7 @@ class PublicIpPrefs extends Gtk.Grid {
 		this._settings.bind(ON_MOUSE_OVER_STATE, switchWidget, 'active', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(switchWidget, 0,0,0);
-		this.attach(container, 0, 4, 1, 1);
+		this.attach(container, 0, 5, 1, 1);
 		
 	}
 }

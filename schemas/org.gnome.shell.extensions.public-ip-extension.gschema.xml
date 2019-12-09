@@ -12,6 +12,10 @@
       <default>"ip-api.com"</default>
       <summary>API service</summary>
     </key>
+    <key type="s" name="indicator-panel-align">
+      <default>"right"</default>
+      <summary>Indicator align</summary>
+    </key>
     <key type="b" name="enable-onmouse-display">
       <default>false</default>
       <summary>Enable full display mode onMouseOver</summary>
