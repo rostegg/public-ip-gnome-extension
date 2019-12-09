@@ -17,7 +17,11 @@
 
 * Available settings
 
-![Example-Settings](../assets/settings.png)
+![Example-Settings](../assets/ext-settings.png)
+
+* On mouseover full display
+
+![Example-On-Mouseover](../assets/example-on-mouseover.gif)
 
 # How to install on Arch Linux
 
