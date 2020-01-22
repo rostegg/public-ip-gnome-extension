@@ -108,7 +108,7 @@ const servicesRequestProcessors = {
     }
   },
   // thanks to https://github.com/Josholith/gnome-extension-lan-ip-address/blob/master/extension.js
-  'local-ip': {
+  'route-ip': {
     process: function (callback) {
       const commandOutputBytes = GLib.spawn_command_line_sync('ip route get 1.1.1.1')[1];
       let commandOutputString = Array.from(commandOutputBytes).reduce(
@@ -118,6 +118,18 @@ const servicesRequestProcessors = {
       let matches = commandOutputString.match(/src [^ ]+/g);
       const lanIpAddress = matches ? matches[0].split(' ')[1] : CANT_GET_LOCAL_IP
       callback(null, { ip: lanIpAddress });
+    }
+  },
+  'hostname': {
+    process: function (callback) {
+      const commandOutputBytes = GLib.spawn_command_line_sync('hostname -I')[1];
+      let commandOutputString = Array.from(commandOutputBytes).reduce(
+        (accumulator, currentValue) => accumulator + String.fromCharCode(currentValue),
+        ''
+      );
+      // get first ip from output
+      const hostname = commandOutputString.split(' ')[0];
+      callback(null, { ip: hostname });
     }
   }
 }
@@ -143,8 +155,9 @@ const displayModeProcessors = {
 }
 
 const selectIcon = (responseData) => {
-  const currentService = Settings.get_string('api-service')
-  return currentService === 'local-ip' ? Gio.icon_new_for_string(`${Me.path}/icons/flags/local-ip-icon.png`) :
+  const defaultIconServices = ['route-ip', 'hostname'];
+  const currentService = Settings.get_string('api-service');
+  return defaultIconServices.includes(currentService) ? Gio.icon_new_for_string(`${Me.path}/icons/flags/local-ip-icon.png`) :
                                           Gio.icon_new_for_string(`${Me.path}/icons/flags/${responseData.countryCode}.png`);
 }  
 
