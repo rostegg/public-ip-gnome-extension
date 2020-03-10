@@ -14,7 +14,7 @@ const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
 const init = () => {/* Empty */};
 
-const PublicPrefs = GObject.registerClass(
+const PublicIpPrefs = GObject.registerClass(
 class PublicIpPrefs extends Gtk.Grid {
 	
 	_init() {
