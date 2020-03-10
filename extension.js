@@ -10,7 +10,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 const Settings = Convenience.getSettings();
 const GLib = imports.gi.GLib;
-
+const GObject = imports.gi.GObject;
 const NO_CONNECTION = 'Waiting for connection';
 const CANT_GET_LOCAL_IP = `Can't get local ip`;
 const CONNECTION_REFUSED = 'Connection refused';
@@ -169,10 +169,11 @@ const updateDisplay = (displayMode = 'ip-and-flag') => {
   service.process(requestCallback);
 };
 
+const IpInfoIndicator = GObject.registerClass(
 class IpInfoIndicator extends PanelMenu.Button {
 
-  constructor() {
-    super(0.0, "Ip Info Indicator", false);
+  _init(menuAlignment, nameText, dontCreateMenu) {
+    super._init(0.0, "Ip Info Indicator", false);
     let hbox = new St.BoxLayout({style_class: 'ip-data-panel'});
 
     _icon = new St.Icon({
@@ -264,7 +265,7 @@ class IpInfoIndicator extends PanelMenu.Button {
   }
 
   
-};
+});
 
 let _indicator;
 

@@ -1,4 +1,4 @@
-const { Gtk, Gio, GLib } = imports.gi;
+const { Gtk, Gio, GLib, GObject } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
@@ -14,10 +14,11 @@ const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
 const init = () => {/* Empty */};
 
+const PublicPrefs = GObject.registerClass(
 class PublicIpPrefs extends Gtk.Grid {
 	
-	constructor() {
-		super();
+	_init() {
+		super._init();
 		this.margin = 15;
 		this.row_spacing = 3;
 		this._settings = Convenience.getSettings();
@@ -98,10 +99,10 @@ class PublicIpPrefs extends Gtk.Grid {
 		this.attach(container, 0, 5, 1, 1);
 		
 	}
-}
+});
 
 const buildPrefsWidget = () => {
-	let widget = new PublicIpPrefs();
+	let widget = PublicIpPrefs;
 	widget.show_all();
 	return widget;
 }
