@@ -102,7 +102,7 @@ class PublicIpPrefs extends Gtk.Grid {
 });
 
 const buildPrefsWidget = () => {
-	let widget = PublicIpPrefs;
+	let widget = new PublicIpPrefs;
 	widget.show_all();
 	return widget;
 }
