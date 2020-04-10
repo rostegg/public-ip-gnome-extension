@@ -170,7 +170,7 @@ const updateDisplay = (displayMode = 'ip-and-flag') => {
   service.process(requestCallback);
 };
 
-var IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
+let IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
 
   _init(menuAlignment, nameText, dontCreateMenu) {
     super._init(0.0, "Ip Info Indicator", false);
@@ -271,8 +271,8 @@ IpInfoIndicator = Compatibility.wrapClass(IpInfoIndicator);
  
 let _indicator;
 
-const init = () => {/* Empty */};
+function init() {/* Empty */};
 
-const enable = () => _indicator = new IpInfoIndicator;
+function enable() { _indicator = new IpInfoIndicator; }
 
-const disable = () => _indicator.destroy();
+function disable() { _indicator.destroy(); }
