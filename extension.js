@@ -9,6 +9,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 const Settings = Convenience.getSettings();
+const CompatibilityUtils = Me.imports.compatibilityUtils;
 const GLib = imports.gi.GLib;
 
 const NO_CONNECTION = 'Waiting for connection';
@@ -169,10 +170,10 @@ const updateDisplay = (displayMode = 'ip-and-flag') => {
   service.process(requestCallback);
 };
 
-class IpInfoIndicator extends PanelMenu.Button {
+var IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
 
-  constructor() {
-    super(0.0, "Ip Info Indicator", false);
+  _init(menuAlignment, nameText, dontCreateMenu) {
+    super._init(0.0, "Ip Info Indicator", false);
     let hbox = new St.BoxLayout({style_class: 'ip-data-panel'});
 
     _icon = new St.Icon({
@@ -188,7 +189,7 @@ class IpInfoIndicator extends PanelMenu.Button {
     hbox.add_child(_icon);
     hbox.add_child(_label);
 
-    this.actor.add_actor(hbox);
+    CompatibilityUtils.getActor(this).add_actor(hbox);
 
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, Settings.get_string('indicator-panel-align'));
   
@@ -255,9 +256,9 @@ class IpInfoIndicator extends PanelMenu.Button {
     Settings.connect('changed::api-service', this.updateService.bind(this));
     Settings.connect('changed::indicator-panel-align', this.updateAlign.bind(this));
 
-    this.actor.connect('button-press-event', this.onClick.bind(this));
-    this.actor.connect('enter-event', this.onEntryNotify.bind(this));
-    this.actor.connect('leave-event', this.onLeaveNotify.bind(this));
+    CompatibilityUtils.getActor(this).connect('button-press-event', this.onClick.bind(this));
+    CompatibilityUtils.getActor(this).connect('enter-event', this.onEntryNotify.bind(this));
+    CompatibilityUtils.getActor(this).connect('leave-event', this.onLeaveNotify.bind(this));
     
     this.update();
     this.updateRefreshRate();
@@ -266,6 +267,8 @@ class IpInfoIndicator extends PanelMenu.Button {
   
 };
 
+IpInfoIndicator = CompatibilityUtils.wrapClass(IpInfoIndicator);
+ 
 let _indicator;
 
 const init = () => {/* Empty */};

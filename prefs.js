@@ -2,6 +2,7 @@ const { Gtk, Gio, GLib } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
+const CompatibilityUtils = Me.imports.compatibilityUtils;
 
 const REFRESH_RATE = 'refresh-rate';
 const API_SERVICE = 'api-service';
@@ -14,10 +15,10 @@ const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
 const init = () => {/* Empty */};
 
-class PublicIpPrefs extends Gtk.Grid {
-	
-	constructor() {
-		super();
+var PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
+
+	_init() {
+		super._init();
 		this.margin = 15;
 		this.row_spacing = 3;
 		this._settings = Convenience.getSettings();
@@ -100,8 +101,10 @@ class PublicIpPrefs extends Gtk.Grid {
 	}
 }
 
+PublicIpPrefs = CompatibilityUtils.wrapClass(PublicIpPrefs);
+
 const buildPrefsWidget = () => {
-	let widget = new PublicIpPrefs();
+	let widget = new PublicIpPrefs;
 	widget.show_all();
 	return widget;
 }
