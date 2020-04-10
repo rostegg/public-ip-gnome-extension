@@ -9,7 +9,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 const Settings = Convenience.getSettings();
-const CompatibilityUtils = Me.imports.compatibilityUtils;
+const Compatibility = Me.imports.compatibility;
 const GLib = imports.gi.GLib;
 
 const NO_CONNECTION = 'Waiting for connection';
@@ -189,7 +189,7 @@ var IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
     hbox.add_child(_icon);
     hbox.add_child(_label);
 
-    CompatibilityUtils.getActor(this).add_actor(hbox);
+    Compatibility.getActor(this).add_actor(hbox);
 
     Main.panel.addToStatusArea('ip-info-indicator', this, 1, Settings.get_string('indicator-panel-align'));
   
@@ -256,9 +256,9 @@ var IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
     Settings.connect('changed::api-service', this.updateService.bind(this));
     Settings.connect('changed::indicator-panel-align', this.updateAlign.bind(this));
 
-    CompatibilityUtils.getActor(this).connect('button-press-event', this.onClick.bind(this));
-    CompatibilityUtils.getActor(this).connect('enter-event', this.onEntryNotify.bind(this));
-    CompatibilityUtils.getActor(this).connect('leave-event', this.onLeaveNotify.bind(this));
+    Compatibility.getActor(this).connect('button-press-event', this.onClick.bind(this));
+    Compatibility.getActor(this).connect('enter-event', this.onEntryNotify.bind(this));
+    Compatibility.getActor(this).connect('leave-event', this.onLeaveNotify.bind(this));
     
     this.update();
     this.updateRefreshRate();
@@ -267,7 +267,7 @@ var IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
   
 };
 
-IpInfoIndicator = CompatibilityUtils.wrapClass(IpInfoIndicator);
+IpInfoIndicator = Compatibility.wrapClass(IpInfoIndicator);
  
 let _indicator;
 

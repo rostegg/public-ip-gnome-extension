@@ -2,7 +2,7 @@ const { Gtk, Gio, GLib } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
-const CompatibilityUtils = Me.imports.compatibilityUtils;
+const Compatibility = Me.imports.compatibility;
 
 const REFRESH_RATE = 'refresh-rate';
 const API_SERVICE = 'api-service';
@@ -101,7 +101,7 @@ var PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 	}
 }
 
-PublicIpPrefs = CompatibilityUtils.wrapClass(PublicIpPrefs);
+PublicIpPrefs = Compatibility.wrapClass(PublicIpPrefs);
 
 const buildPrefsWidget = () => {
 	let widget = new PublicIpPrefs;
