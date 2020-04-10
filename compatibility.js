@@ -12,7 +12,7 @@ function getActor(obj) {
 
 // https://gitlab.gnome.org/GNOME/gjs/commit/72062b5e036821731116a9263b55ee647e3bdadf
 function wrapClass(klass) {
-    if (shellMinorVersion >= 36)
+    if (shellMinorVersion >= 35)
         return GObject.registerClass(klass);
     return klass;
 }
