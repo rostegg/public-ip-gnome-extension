@@ -172,8 +172,8 @@ const updateDisplay = (displayMode = 'ip-and-flag') => {
 
 let IpInfoIndicator = class IpInfoIndicator extends PanelMenu.Button {
 
-  _init(menuAlignment, nameText, dontCreateMenu) {
-    super._init(0.0, "Ip Info Indicator", false);
+  constructor(menuAlignment, nameText, dontCreateMenu) {
+    super(0.0, "Ip Info Indicator", false);
     let hbox = new St.BoxLayout({style_class: 'ip-data-panel'});
 
     _icon = new St.Icon({
