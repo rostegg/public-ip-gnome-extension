@@ -18,9 +18,12 @@ function init() {/* Empty */};
 let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 	
 	_init(params) {
-		super._init({});
-		this.margin = 15;
-		this.row_spacing = 3;
+		super._init({
+			height_request: 380,
+			spacing: 10,
+			margin: 20
+		});
+		
 		this._settings = Convenience.getSettings();
 		
 		let label = null;
@@ -97,7 +100,7 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		container.pack_start(label, 0,0,0);
 		container.pack_end(switchWidget, 0,0,0);
 		this.attach(container, 0, 5, 1, 1);
-		
+		this.show_all();
 	}
 }
 
