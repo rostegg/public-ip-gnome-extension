@@ -17,8 +17,8 @@ function init() {/* Empty */};
 
 let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 	
-	_init() {
-		super._init();
+	constructor() {
+		super();
 		this.margin = 15;
 		this.row_spacing = 3;
 		this._settings = Convenience.getSettings();
