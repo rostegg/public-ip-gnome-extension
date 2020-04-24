@@ -16,18 +16,16 @@ const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 function init() {/* Empty */};
 
 let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
-
-	_init() {
-		super._init({
-			margin: 15,
-			row_spacing: 3
-		});
-
+	
+	constructor() {
+		super();
+		this.margin = 15;
+		this.row_spacing = 3;
 		this._settings = Convenience.getSettings();
 		
 		let label = null;
 		let container = null;
-		
+
 		/* Refresh rate */
 		container = new Gtk.HBox({spacing: 5});
 		label = new Gtk.Label({
@@ -99,13 +97,14 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		container.pack_start(label, 0,0,0);
 		container.pack_end(switchWidget, 0,0,0);
 		this.attach(container, 0, 5, 1, 1);
+		
 	}
 }
 
 PublicIpPrefs = Compatibility.wrapClass(PublicIpPrefs);
 
-function buildPrefsWidget(){
-	let widget = new PublicIpPrefs;
+function buildPrefsWidget() {
+	let widget = new PublicIpPrefs();
 	widget.show_all();
 	return widget;
 }
