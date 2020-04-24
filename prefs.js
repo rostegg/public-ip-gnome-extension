@@ -1,8 +1,7 @@
-const { Gtk, Gio, GLib } = imports.gi;
+const { Gtk, Gio, GLib, GObject } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
-const Compatibility = Me.imports.compatibility;
 
 const REFRESH_RATE = 'refresh-rate';
 const API_SERVICE = 'api-service';
@@ -13,17 +12,15 @@ const INDICATOR_ALIGN = 'indicator-panel-align';
 const INDICATOR_ALIGNS = ['left', 'right', 'center'];
 const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
-function init() {/* Empty */};
+const init = () => {/* Empty */};
 
-let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
+const PublicIpPrefs = GObject.registerClass(
+class PublicIpPrefs extends Gtk.Grid {
 	
-	_init(params) {
-		super._init({
-			height_request: 380,
-			spacing: 10,
-			margin: 20
-		});
-		
+	_init() {
+		super._init();
+		this.margin = 15;
+		this.row_spacing = 3;
 		this._settings = Convenience.getSettings();
 		
 		let label = null;
@@ -43,8 +40,7 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
 		this._settings.bind(REFRESH_RATE, refreshSpinButton, 'value', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(refreshSpinButton, 0,0,0);
-		this.pack_start(container, true, true, 0);
-		//this.attach(container, 0, 1, 1, 1);
+		this.attach(container, 0, 1, 1, 1);
 
 		/* Display only flag */
 		container = new Gtk.HBox({spacing: 5});
@@ -57,8 +53,7 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
 		this._settings.bind(DISPLAY_MODE, displayModeComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(displayModeComboBox, 0,0,0);
-		this.pack_start(container, true, true, 0);
-		//this.attach(container, 0, 2, 1, 1);
+		this.attach(container, 0, 2, 1, 1);
 
 		/* API service endpoint */
 		container = new Gtk.HBox({spacing: 5});
@@ -72,8 +67,7 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
 		this._settings.bind(API_SERVICE, apiServicesComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(apiServicesComboBox, 0,0,0);
-		this.pack_start(container, true, true, 0);
-		//this.attach(container, 0, 3, 1, 1);
+		this.attach(container, 0, 3, 1, 1);
 
 		/* Indicator align */
 		container = new Gtk.HBox({spacing: 5});
@@ -87,8 +81,7 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
 		this._settings.bind(INDICATOR_ALIGN, indicatorAlignComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(indicatorAlignComboBox, 0,0,0);
-		this.pack_start(container, true, true, 0);
-		//this.attach(container, 0, 4, 1, 1);
+		this.attach(container, 0, 4, 1, 1);
 		
 		/* Enable onMouseOver */
 		container = new Gtk.HBox({spacing: 5});
@@ -103,15 +96,13 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
 		this._settings.bind(ON_MOUSE_OVER_STATE, switchWidget, 'active', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(switchWidget, 0,0,0);
-		this.pack_start(container, true, true, 0);
-		//this.attach(container, 0, 5, 1, 1);
+		this.attach(container, 0, 5, 1, 1);
+		
 	}
-}
+});
 
-PublicIpPrefs = Compatibility.wrapClass(PublicIpPrefs);
-
-function buildPrefsWidget() {
-	let widget = new PublicIpPrefs();
+const buildPrefsWidget = () => {
+	let widget = new PublicIpPrefs;
 	widget.show_all();
 	return widget;
 }
