@@ -15,7 +15,7 @@ const ON_MOUSE_OVER_STATE = 'enable-onmouse-display';
 
 function init() {/* Empty */};
 
-let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
+let PublicIpPrefs = class PublicIpPrefs extends Gtk.VBox {
 	
 	_init(params) {
 		super._init({
@@ -43,7 +43,8 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		this._settings.bind(REFRESH_RATE, refreshSpinButton, 'value', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(refreshSpinButton, 0,0,0);
-		this.attach(container, 0, 1, 1, 1);
+		this.pack_start(container, true, true, 0);
+		//this.attach(container, 0, 1, 1, 1);
 
 		/* Display only flag */
 		container = new Gtk.HBox({spacing: 5});
@@ -56,7 +57,8 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		this._settings.bind(DISPLAY_MODE, displayModeComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(displayModeComboBox, 0,0,0);
-		this.attach(container, 0, 2, 1, 1);
+		this.pack_start(container, true, true, 0);
+		//this.attach(container, 0, 2, 1, 1);
 
 		/* API service endpoint */
 		container = new Gtk.HBox({spacing: 5});
@@ -70,7 +72,8 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		this._settings.bind(API_SERVICE, apiServicesComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(apiServicesComboBox, 0,0,0);
-		this.attach(container, 0, 3, 1, 1);
+		this.pack_start(container, true, true, 0);
+		//this.attach(container, 0, 3, 1, 1);
 
 		/* Indicator align */
 		container = new Gtk.HBox({spacing: 5});
@@ -84,7 +87,8 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		this._settings.bind(INDICATOR_ALIGN, indicatorAlignComboBox, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(indicatorAlignComboBox, 0,0,0);
-		this.attach(container, 0, 4, 1, 1);
+		this.pack_start(container, true, true, 0);
+		//this.attach(container, 0, 4, 1, 1);
 		
 		/* Enable onMouseOver */
 		container = new Gtk.HBox({spacing: 5});
@@ -99,8 +103,8 @@ let PublicIpPrefs = class PublicIpPrefs extends Gtk.Grid {
 		this._settings.bind(ON_MOUSE_OVER_STATE, switchWidget, 'active', Gio.SettingsBindFlags.DEFAULT);
 		container.pack_start(label, 0,0,0);
 		container.pack_end(switchWidget, 0,0,0);
-		this.attach(container, 0, 5, 1, 1);
-		this.show_all();
+		this.pack_start(container, true, true, 0);
+		//this.attach(container, 0, 5, 1, 1);
 	}
 }
 
