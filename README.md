@@ -39,22 +39,14 @@ makepkg -sri
 
 You can download extension from link above.
 
-At the moment for gnome-shell >=3.36 you must use [this version of the extension](https://github.com/rostegg/public-ip-gnome-extension/tree/gnome-3.36-hotfix)
+Or install manually (but if you already use [site](https://extensions.gnome.org/) for another extensions, then [disable autoupdate](https://askubuntu.com/questions/914532/how-do-i-disable-an-update-for-gnome-shell-extensions-notifications))
 
-If you want install it manually, clone project to ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com folder and restart gnome desktop (Alt + F2 -> r -> Enter)
-
-gnome-shell <=3.34:
+If you want install it manually, clone project to ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com folder and restart gnome desktop (Alt + F2 -> r -> Enter):
 
 ```
 git clone https://github.com/rostegg/public-ip-gnome-extension.git ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com 
 ```
 
-
-gnome-shell >=3.36:
-
-```
-git clone -b gnome-3.36-hotfix https://github.com/rostegg/public-ip-gnome-extension.git ~/.local/share/gnome-shell/extensions/public-ip-extension@rostegg.github.com 
-```
 
 # Why 'Connection refused'?  
 This may be for two reasons:
