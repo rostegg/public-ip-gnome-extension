@@ -25,7 +25,7 @@
 
 # How to install on Arch Linux
 
-If you are using Arch Linux feel free to use this AUR. (As Arch Linux is using gnome-shell 3.36 right now and will be on edge this AUR is using gnome-3.36-hotfix as well)
+If you are using Arch Linux feel free to use this AUR.
 
 https://aur.archlinux.org/packages/gnome-shell-extension-public-ip-git/
 
