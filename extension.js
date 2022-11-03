@@ -26,7 +26,7 @@ const makeHttpSession = () => {
 
 const servicesRequestProcessors = {
   'ip-api.com': {
-    endpoint: `http://ip-api.com/json/?fields=status,countryCode,query`,
+    endpoint: `http://ip-api.com/json/?fields=status,countryCode,query,isp`,
     process: function (callback) {
       let httpSession = makeHttpSession()
       let request = Soup.Message.new('GET', this.endpoint);
@@ -37,7 +37,7 @@ const servicesRequestProcessors = {
         }
         let responseJSON = request.response_body.data;
         let responseData = JSON.parse(responseJSON);
-        let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode };
+        let simplifiedResponseData = { ip: responseData.query, countryCode: responseData.countryCode, isp: responseData.isp };
         callback(null, simplifiedResponseData);
       };
   
@@ -137,7 +137,7 @@ const servicesRequestProcessors = {
 
 const displayModeProcessors = {
   'ip-and-flag' : (err, responseData) => {
-    _label.text = !responseData ? CONNECTION_REFUSED : responseData.ip;
+    _label.text = !responseData ? CONNECTION_REFUSED : responseData.ip + ' ' + responseData.isp;
 
     _icon.gicon = !responseData ? Gio.icon_new_for_string(`${Me.path}/icons/flags/error.png`) : 
                                     selectIcon(responseData);
